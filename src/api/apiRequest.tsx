@@ -1,47 +1,92 @@
 import React from "react";
 import Api from "./conf";
-import { SearchResults, DetailsProps } from "../interface";
+import { apiCategories, apiProduct } from "../interface";
+import { promises } from "stream";
 
-/*recherche film ou série via le titre dans l'api  */
+/*recherche toutes les catégories dans l'api  */
 
-async function getMediaByTitle(title: string, page: number = 1) {
 
-    const response = await fetch(`${Api.url}?apikey=${Api.key}&s=${title}&page=${page}`);
+export async function ApiGetAllCategories(): Promise<apiCategories[]> {
+    return new Promise((resolve, reject) => {
 
-    const data = await response.json();
-    const pagination = getPagination(parseInt(data.totalResults));
-    const newData: SearchResults = data;
+        const option = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
 
-    newData.pagination = pagination;
-    newData.page = page;
-    newData.title = title;
+            },
+            url: Api.url + '/api/categories?populate=*',
+        }
 
-    return newData;
+        fetch(option.url, option)
+            .then(response => response.json())
+            .then(data => {
+                const categories: apiCategories[] = data.data;
+
+                resolve(categories);
+
+            }
+            )
+
+    })
+
+}
+
+/* recherche les produits qui on la méme id de catégories */
+
+export async function ApiGetAllProductsByCategory(id: number): Promise<apiProduct[]> {
+
+    return new Promise((resolve, reject) => {
+
+        const option = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            },
+            url: Api.url + '/api/products?filters[categorie][id][$eq]=' + id + '&populate=*',
+        }
+
+        fetch(option.url, option)
+            .then(response => response.json())
+            .then(data => {
+                const products: apiProduct[] = data.data;
+
+                resolve(products);
+
+            })
+    })
+
 
 }
 
-async function getMediaByIdImB(id: string | undefined) {
+export async function ApiGetProductById(id: number): Promise<apiProduct> {
 
-    const response = await fetch(`${Api.url}?apikey=${Api.key}&i=${id}`);
+    return new Promise((resolve, reject) => {
 
-    const data: DetailsProps = await response.json();
+        const option = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
 
-    return data;
+            },
+            url: Api.url + '/api/products/' + id + '?populate=*',
+        }
+
+        fetch(option.url, option)
+            .then(response => response.json())
+            .then(data => {
+                const products: apiProduct = data.data;
+
+                resolve(products);
+
+            })
+    })
+
 }
 
-export { getMediaByTitle, getMediaByIdImB };
-
-function getPagination(totalResults: number) {
-
-    const totalPage = Math.ceil(totalResults / 10);
-    const pagination = [];
-
-    for (let i = 1; i <= totalPage; i++) {
-        pagination.push(i);
-    }
-
-    return pagination;
-
-}
 
 

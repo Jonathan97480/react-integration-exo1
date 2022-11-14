@@ -1,5 +1,5 @@
 const Api = {
-    url: 'http://www.omdbapi.com/',
+    url: 'http://localhost:1337',
     // ...Key
     key: "190bf6d7",
 }

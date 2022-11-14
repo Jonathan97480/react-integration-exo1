@@ -1,36 +1,28 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { CardProps } from "../interface";
+import { Link } from "react-router-dom";
+import Api from "../api/conf";
+import { apiProduct } from "../interface";
+
+interface cardProps {
+    name: string;
+    desc: string;
+    pic: string;
+    id: number;
+}
 
 
+export default function Card(props: cardProps) {
 
-export default function Card(props: CardProps) {
 
-    const { Title, Poster, Type, imdbID, Year } = props;
-    const navigate = useNavigate();
-    console.log("Poster: ", Poster)
     return (
-
-        <Link to={`details/${imdbID}`} >
-            <h3>{Title}</h3>
-            <div>
-
-                {
-                    Poster === "N/A" ?
-                        <img src="https://via.placeholder.com/300x450" alt="placeholder" /> :
-                        <img src={Poster} alt={Title} width="300" />
-                }
-                <p>
-                    {Type}
-
-                </p>
-                <p>
-                    {Year}
-                </p>
-
-            </div>
-        </Link>
+        <div className='card'>
+            <img src={Api.url + props.pic} alt="" />
+            <h2>{props.name}</h2>
 
 
-    );
+            <p>{props.desc} </p>
+            <Link to={'/product/' + props.id} >En savoir plus</Link>
+        </div>
+    )
+
 }

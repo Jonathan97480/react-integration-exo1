@@ -1,2 +1,3 @@
-export type { CardProps, SearchResults } from './card';
-export type { DetailsProps, Rating } from './details';
+export type { apiCategories } from './api';
+export type { apiProduct } from './api';
+

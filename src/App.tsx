@@ -1,29 +1,30 @@
-import React from 'react';
-import { Home, About, Details } from './pages';
-import { Header, Footer } from './components';
-import { Routes, Route, HashRouter } from 'react-router-dom';
-
+import React, { useState } from 'react';
 import './scss/style.scss';
+import { About, Contact, Home, Legal, Product, Products } from './pages';
+import { Header, Footer } from './components';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+
+
 
 function App() {
+
+
   return (
     <div>
 
-      <HashRouter>
+      <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />}>
-          </Route>
-
-          <Route path="/about" element={<About />}>
-          </Route>
-
-          <Route path="/details/:id" element={<Details />}>
-          </Route>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/products/:id" element={<Products />}></Route>
+          <Route path="/product/:id" element={<Product />}></Route>
+          <Route path="/contact" element={<Contact />}></Route>
+          <Route path="/legal" element={<Legal />}></Route>
+          <Route path="/about" element={<About />}></Route>
 
         </Routes>
         <Footer />
-      </HashRouter>
+      </BrowserRouter>
 
     </div>
   );
